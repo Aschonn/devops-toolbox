@@ -1,0 +1,41 @@
+# creation of a network policy allowing engress traffic to database (sql) and payroll
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: internal-policy
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      name: internal
+
+# specify traffic types allowed
+  policyTypes:
+  - Egress
+  - Ingress
+  ingress:
+    - {}
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          name: mysql
+    ports:
+    - protocol: TCP
+      port: 3306
+
+  - to:
+    - podSelector:
+        matchLabels:
+          name: payroll
+    ports:
+    - protocol: TCP
+      port: 8080
+
+# this section allows tcp and udp ports to be opened.
+
+  - ports:
+    - port: 53
+      protocol: UDP
+    - port: 53
+      protocol: TCP

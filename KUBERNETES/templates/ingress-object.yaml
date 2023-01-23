@@ -1,0 +1,18 @@
+# this creates a new instance of ingress that creates a pay-service instance that opens a service when a url tag in specified (/pay)
+
+  name: test-ingress
+  namespace: critical-space
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /pay
+        pathType: Prefix
+        backend:
+          service:
+            name: pay-service
+            port:
+              number: 8282
